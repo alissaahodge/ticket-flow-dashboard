@@ -1,5 +1,6 @@
 import React from 'react';
-import { STATUS_OPTIONS} from '../utilities/StatusOptions';
+import { STATUS_OPTIONS } from '../utilities/StatusOptions';
+import { Format } from '../utilities/Format';
 import '../style.css';
 
 export default function StatusBar({ tickets }) {
@@ -8,8 +9,14 @@ export default function StatusBar({ tickets }) {
     return acc;
   }, {});
   return (
-      <div>
-        {STATUS_OPTIONS.filter((status)=>status.val!=="all").map((status)=> <span key={status.val}>{ticketsByStatus[status.val]} <i>{status.val}</i> </span>)}
-      </div>
+    <div>
+      {Object.entries(STATUS_OPTIONS)
+        .filter(([status]) => status !== 'all')
+        .map(([status, option]) => (
+          <span key={status}>
+            <b>{ticketsByStatus[status] || 0}</b> <i>{Format.status(status)} </i>
+          </span>
+        ))}
+    </div>
   );
 }

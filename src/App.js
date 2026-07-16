@@ -1,22 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Filters from './filters/Filters';
 import TicketCard from './components/TicketCard';
 import StatusBar from './components/StatusBar';
 import { useFetchTickets } from './utilities/useFetchTickets';
+import useFilteredTickets from './hooks/useFilteredTickets';
 import { STATUS_OPTIONS_CYCLE } from './utilities/StatusOptions';
 import './style.css';
 
 export default function App() {
-  const [nameQuery, setNameQuery] = useState("");
-  const [statusQuery, setStatusQuery] = useState('all');
   const { tickets, loading, setTickets } = useFetchTickets();
-
-  const filteredTickets = tickets.filter((t) => {
-    if (nameQuery && !t.name.toLowerCase().includes(nameQuery.toLowerCase()))
-      return false;
-    if (statusQuery !== 'all' && t.status !== statusQuery) return false;
-    return true;
-  });
+  const { filteredTickets, nameQuery, setNameQuery, statusQuery, setStatusQuery, priorityQuery, setPriorityQuery } = useFilteredTickets(tickets);
 
   const advanceTicketCycle = (id) => {
     setTickets((prev) =>
@@ -35,6 +28,8 @@ export default function App() {
         setNameQuery={setNameQuery}
         statusQuery={statusQuery}
         setStatusQuery={setStatusQuery}
+        priorityQuery={priorityQuery}
+        setPriorityQuery={setPriorityQuery} 
       ></Filters>
       <div>
         Tickets list {loading && <span>loading...</span>}
