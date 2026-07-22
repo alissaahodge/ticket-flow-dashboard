@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Filters from './filters/Filters';
 import TicketCard from './components/TicketCard';
 import StatusBar from './components/StatusBar';
-import { useFetchTickets } from './utilities/useFetchTickets';
+import useFetchTickets from './hooks/useFetchTickets';
 import useFilteredTickets from './hooks/useFilteredTickets';
+import TicketDetailDialog from "./components/TicketDetailDialog";
 import { STATUS_OPTIONS_CYCLE } from './utilities/StatusOptions';
 import './style.css';
 
 export default function App() {
   const { tickets, loading, setTickets } = useFetchTickets();
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const { filteredTickets, nameQuery, setNameQuery, statusQuery, setStatusQuery, priorityQuery, setPriorityQuery } = useFilteredTickets(tickets);
 
   const advanceTicketCycle = (id) => {
@@ -33,11 +35,13 @@ export default function App() {
       ></Filters>
       <div>
         Tickets list {loading && <span>loading...</span>}
-        {!loading && <StatusBar tickets={filteredTickets}></StatusBar>}
+        {!loading && !filteredTickets.length && <div>Currently no tickets..</div>}
+        {!loading && filteredTickets.length && <StatusBar tickets={filteredTickets}></StatusBar>}
         <ul>
           {!loading &&
             filteredTickets.map((t) => (
               <TicketCard
+                setSelectedTicket={setSelectedTicket}
                 key={t.id}
                 ticket={t}
                 cycleFn={advanceTicketCycle}
@@ -45,6 +49,7 @@ export default function App() {
             ))}
         </ul>
       </div>
+      <TicketDetailDialog ticket={selectedTicket} setSelectedTicketFn={setSelectedTicket}></TicketDetailDialog>
     </div>
   );
 }
