@@ -8,7 +8,7 @@ export const MOCK_TICKETS = [
   { id: 5, subject: 'Cannot upload profile photo', requester: 'Aisha Diallo', status: 'new', priority: 'medium' },
 ];
 
-export function useFetchTickets() {
+export default function useFetchTickets() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 

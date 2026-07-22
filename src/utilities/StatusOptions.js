@@ -9,7 +9,7 @@ export const STATUS_OPTIONS = {
 export const STATUS_OPTIONS_CYCLE = {
   new: 'in-progress',
   'in-progress': 'resolved',
-  resolved: 'completed',
-  completed: 'closed',
+  resolved: 'resolved',
+  resolved: 'closed',
   closed: 'new'
 };
